@@ -17,11 +17,7 @@ void loop() {
         digitalWrite(left_LED, HIGH);     // 開燈
         Serial.println("left_LED is ON"); // 回應訊息給電腦
     }
-     else if (str == "B") {
-        digitalWrite(right_LED, HIGH);
-        Serial.println("right_LED is on");
-    }
-     else if (str == "C"){
+     else if (str == "B"){
         digitalWrite(left_LED, LOW);
         digitalWrite(right_LED, LOW);
         Serial.println("All LED if off");
