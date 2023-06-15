@@ -2,3 +2,4 @@
 到https://ngrok.com/download，下載Ngrok
 再將zip檔下載，並將receive.py中的路徑更新為下載的best.pt路徑
 send.py端執行後使用Ngrok.exe，輸入ngrok http 5000，將轉譯的網址貼入receive.py端的URL中
+確認以上步驟完成即可執行receive.py
