@@ -1,0 +1,2 @@
+執行前須將best.pt下載，並將receive中的路徑更新為下載的best.pt路徑
+send端執行後使用Ngrok，輸入ngrok http 5000，將轉譯的網址貼入receive端的URL中
