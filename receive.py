@@ -1,37 +1,12 @@
 import cv2
 import torch
-from cvzone import FPS
-from time import strftime
-import smtplib
-from email.mime.image import MIMEImage
 import requests
 import serial
 
-def send_gmail(capture): #建立寄信函式
-    mime = MIMEImage(capture)
-    mime["Content-Type"] = "application/octet-stream" #設定檔案類型
-    mime["Content-Disposition"] = f'attachment; filename="{filename}"'  # 附件的檔案名稱
-    mime["Subject"] = "注意,有入侵者!"  # 撰寫郵件標題
-    mime["From"] = "任"  # 撰寫你的暱稱或是信箱
-    mime["To"] = "任"  # 撰寫寄件人稱呼
-    mime["Cc"] = "tdac99@gmail.com, tdac99@gmail.com"  # 副本收件人
-    msg = mime.as_string()  # 將msg將text轉成str
-    smtp = smtplib.SMTP("smtp.gmail.com", 587)  # gmail的port
-    smtp.ehlo()  # 申請身分
-    smtp.starttls()  # 加密文件，避免私密信息被截取
-    smtp.login("tdac99@gmail.com", "persytmkbqqtrhwq") #登入寄件人Gmail帳戶&應用程式密碼
-    from_addr = "tdac99@gmail.com" #寄件人Gmail
-    to_addr = ["tdac99@gmail.com"] #收件人Gmail
-    status = smtp.sendmail(from_addr, to_addr, msg)
-    if status == {}:
-        print("郵件傳送成功!")
-    else:
-        print("郵件傳送失敗!")
-    smtp.quit() #登出smtp
 
 def send_line_notify(filename):
     url = "https://notify-api.line.me/api/notify"
-    token = "dKLBZqd9sUycSxRpINVrlO4FCo7zYffZQE2towdcnUE"
+    token = "輸入申請line Notify的金鑰"
 
     headers = {"Authorization": "Bearer " + token}
 
@@ -40,17 +15,14 @@ def send_line_notify(filename):
 
     response = requests.post(url, headers=headers, data=payload, files=files)
 
-stream_url = 'https://5671-140-127-33-219.jp.ngrok.io'  # 發送端的串流 URL
+stream_url = '輸入發送端使用Ngrok轉譯的url'  # 發送端的串流 URL
 filename = f"person{strftime('%Y%m%d%H%M%S')}.png"
 # 設定YOLOv5模型
-model = torch.hub.load('ultralytics/yolov5', 'custom', path=r'G:\專題 A柱死角\exp_last\weights', force_reload=False)
-# model = torch.hub.load('ultralytics/yolov5', 'custom', path='yolov5s.pt', force_reload=False)
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='輸入best.pt的路徑', force_reload=True)
 # 設定相機
 cap = cv2.VideoCapture(stream_url)
-# cap = cv2.VideoCapture(1,cv2.CAP_DSHOW)
-fps_reader = FPS()
 i = 0
-ser = serial.Serial('COM3', 9600)
+ser = serial.Serial('COM3', 9600) #設定Arduino的COM連接埠
 while True:
     # 讀取影像
     success, frame = cap.read()
@@ -75,7 +47,6 @@ while True:
                     capture = cv2.cvtColor(capture,cv2.COLOR_BGR2RGB)
                     ret, buffer = cv2.imencode('.png', capture)
                     capture2 = buffer.tobytes()
-                    send_gmail(capture2)
                     cv2.imwrite(filename, capture)
                     send_line_notify(filename)
                     label=labels[0]
