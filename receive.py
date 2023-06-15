@@ -53,7 +53,7 @@ while True:
                     cv2.rectangle(dst, (int(x1), int(y1)), (int(x2), int(y2)), (255, 140, 0), 5)
                     cv2.putText(dst, label + " " + str(round(confidence, 2)), (int(x1), int(y1 - 10)),
                                 cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 140, 0), 3)
-    ser.write(b"C\n")
+    ser.write(b"B\n")
     frame2 = cv2.cvtColor(dst, cv2.COLOR_BGR2RGB)
     fps, frame2 = fps_reader.update(frame2, pos=(10, 20), color=(0, 255, 0), scale=1, thickness=1)
     # 顯示影像
